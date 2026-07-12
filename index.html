@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Me & The Kitchen</title>
+<meta name="description" content="My favorite place to be — Me & The Kitchen.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#fbf6ee;
+    --paper-line:#e3d9c6;
+    --ink:#2b2a28;
+    --plum:#6e2a3d;
+    --plum-dark:#4d1d2b;
+    --sage:#6f8b5e;
+    --saffron:#e3a73c;
+    --blush:#e7a6ae;
+    --ring-metal:#c9a94d;
+    --shadow: 0 10px 30px rgba(43,42,40,0.12);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+
+  body{
+    margin:0;
+    background-color: var(--paper);
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E"),
+      repeating-linear-gradient(180deg, transparent 0px, transparent 37px, var(--paper-line) 38px);
+    background-repeat: repeat, repeat;
+    color:var(--ink);
+    font-family:'Lora', serif;
+    line-height:1.6;
+    min-height:100vh;
+  }
+
+  .notebook{
+    position:relative;
+    max-width:920px;
+    margin:0 auto;
+    padding:48px 40px 80px 76px;
+  }
+
+  .spiral{
+    position:absolute;
+    top:0;
+    left:0;
+    bottom:0;
+    width:56px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+    gap:26px;
+    padding-top:70px;
+    pointer-events:none;
+  }
+  .spiral span{
+    display:block;
+    width:26px;
+    height:26px;
+    border-radius:50%;
+    border:5px solid var(--ring-metal);
+    background:
+      radial-gradient(circle at 35% 30%, rgba(255,255,255,0.6), transparent 40%),
+      var(--paper);
+    box-shadow: inset 0 0 0 2px var(--paper), 2px 2px 4px rgba(0,0,0,0.15);
+  }
+
+  /* ---------- Sticky mini header ---------- */
+  .mini-header{
+    position:fixed;
+    top:0; left:0; right:0;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 24px;
+    background:rgba(251,246,238,0.92);
+    backdrop-filter:blur(6px);
+    box-shadow:0 4px 14px rgba(43,42,40,0.1);
+    transform:translateY(-100%);
+    transition:transform 0.3s ease;
+    z-index:100;
+    cursor:pointer;
+  }
+  .mini-header.visible{ transform:translateY(0); }
+  .mini-header img{
+    width:34px;height:34px;
+    border-radius:50%;
+    object-fit:cover;
+    box-shadow:0 2px 6px rgba(110,42,61,0.3);
+  }
+  .mini-header span{
+    font-family:'Caveat', cursive;
+    font-weight:700;
+    color:var(--plum);
+    font-size:1.35rem;
+  }
+
+  header.masthead{
+    text-align:left;
+    margin-bottom: 36px;
+    position:relative;
+  }
+
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+
+  .logo-mark{
+    flex:0 0 auto;
+    width:70px;
+    height:70px;
+    object-fit:cover;
+    border-radius:50%;
+    box-shadow:0 4px 14px rgba(110,42,61,0.28);
+    background:#fffdf9;
+    animation: logo-float 3.2s ease-in-out infinite;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .logo-mark:hover{
+    transform: scale(1.08) rotate(-4deg);
+    box-shadow:0 8px 20px rgba(110,42,61,0.35);
+  }
+
+  @keyframes logo-float{
+    0%, 100%{ transform: translateY(0) rotate(0deg); }
+    50%{ transform: translateY(-4px) rotate(2deg); }
+  }
+
+  h1.site-title{
+    font-family:'Caveat', cursive;
+    font-weight:700;
+    font-size:clamp(3rem, 8vw, 4.6rem);
+    color:var(--plum);
+    margin:0;
+    line-height:0.95;
+    letter-spacing:0.5px;
+  }
+
+  .tagline{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-weight:500;
+    color:var(--ink);
+    opacity:0.75;
+    font-size:1.05rem;
+    margin:10px 0 0 3px;
+  }
+
+  /* ---------- Filter bar ---------- */
+  .filter-bar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+    align-items:center;
+    margin-bottom:28px;
+  }
+  .search-input{
+    flex:1 1 220px;
+    font-family:'Lora', serif;
+    font-size:0.95rem;
+    padding:10px 18px;
+    border-radius:20px;
+    border:1.5px solid var(--paper-line);
+    background:#fffdf9;
+    color:var(--ink);
+    outline:none;
+    transition:border-color 0.2s ease;
+  }
+  .search-input:focus{ border-color:var(--sage); }
+  .filter-chips{ display:flex; gap:8px; flex-wrap:wrap; }
+  .chip{
+    font-family:'Caveat', cursive;
+    font-weight:700;
+    font-size:1.05rem;
+    padding:6px 16px;
+    border-radius:20px;
+    border:1.5px solid var(--paper-line);
+    background:#fffdf9;
+    color:var(--ink);
+    cursor:pointer;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .chip:hover{ border-color:var(--sage); }
+  .chip.active{
+    background:var(--plum);
+    border-color:var(--plum);
+    color:#fbf6ee;
+  }
+  .chip:focus-visible, .search-input:focus-visible{
+    outline:3px solid var(--sage); outline-offset:2px;
+  }
+
+  .empty-state{
+    display:none;
+    font-family:'Caveat', cursive;
+    font-size:1.3rem;
+    color:var(--plum);
+    opacity:0.85;
+    padding:20px 0 30px;
+  }
+
+  /* ---------- Stage / page transitions ---------- */
+  .stage{ perspective:1400px; }
+  .home-view, .recipe-view{
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    transform-style: preserve-3d;
+    opacity:1;
+    transform: rotateY(0) translateX(0);
+  }
+  .page-exit{ opacity:0 !important; transform: rotateY(-8deg) translateX(-26px) !important; }
+  .page-enter-from{ opacity:0 !important; transform: rotateY(8deg) translateX(26px) !important; }
+
+  .cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+    gap:32px;
+  }
+
+  @keyframes card-in{
+    from{ opacity:0; transform:translateY(18px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .card{
+    background:#fffdf9;
+    border-radius:6px;
+    box-shadow:var(--shadow);
+    padding:0 0 20px;
+    cursor:pointer;
+    border:1px solid rgba(43,42,40,0.06);
+    text-align:left;
+    font:inherit;
+    color:inherit;
+    position:relative;
+    overflow:hidden;
+    opacity:0;
+    animation: card-in 0.55s ease forwards;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .card:hover, .card:focus-visible{
+    transform:translateY(-4px) rotate(-0.4deg);
+    box-shadow:0 16px 34px rgba(43,42,40,0.18);
+  }
+  .card:focus-visible{
+    outline:3px solid var(--sage);
+    outline-offset:3px;
+  }
+
+  .tape{
+    position:absolute;
+    top:-8px;
+    left:24px;
+    width:70px;
+    height:26px;
+    background:rgba(231,166,174,0.55);
+    border:1px solid rgba(231,166,174,0.8);
+    transform:rotate(-4deg);
+    z-index:2;
+  }
+
+  .card .illus{
+    width:100%;
+    height:190px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(160deg, #f3ece0, #eee3d1);
+    overflow:hidden;
+  }
+  .card .illus img{width:100%;height:100%;object-fit:cover;display:block;}
+
+  .card-body{padding:18px 22px 0;}
+
+  .card .tag{
+    font-family:'Caveat', cursive;
+    font-weight:700;
+    color:var(--sage);
+    font-size:1.15rem;
+    display:inline-flex;
+    align-items:center;
+    margin-bottom:2px;
+  }
+
+  .card h2{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.6rem;
+    margin:0 0 6px;
+    color:var(--plum-dark);
+  }
+
+  .card p.desc{
+    margin:0;
+    font-size:0.95rem;
+    color:var(--ink);
+    opacity:0.75;
+  }
+
+  /* diet badge */
+  .diet-badge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:13px;height:13px;
+    border:1.5px solid currentColor;
+    border-radius:2px;
+    margin-right:6px;
+  }
+  .diet-badge::after{
+    content:"";
+    width:6px;height:6px;
+    border-radius:50%;
+    background:currentColor;
+  }
+  .diet-badge.veg{ color:#3f8a3f; }
+  .diet-badge.non-veg{ color:#a23b2e; }
+
+  /* favorite heart button */
+  .fav-btn{
+    position:absolute;
+    top:14px;
+    right:16px;
+    z-index:3;
+    background:rgba(255,255,255,0.88);
+    border:none;
+    border-radius:50%;
+    width:32px;height:32px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    box-shadow:0 2px 6px rgba(0,0,0,0.15);
+    transition: transform 0.2s ease;
+  }
+  .fav-btn:hover{ transform:scale(1.15); }
+  .fav-btn:focus-visible{ outline:3px solid var(--sage); outline-offset:2px; }
+  .fav-btn svg{
+    width:17px;height:17px;
+    fill:none;
+    stroke:var(--blush);
+    stroke-width:2;
+    transition: fill 0.2s ease;
+  }
+  .fav-btn.is-fav svg{ fill:var(--blush); }
+
+  .recipe-view{display:none;}
+  .recipe-view.active{display:block;}
+  .home-view.hidden{display:none;}
+
+  .back-link{
+    font-family:'Caveat', cursive;
+    font-weight:700;
+    font-size:1.3rem;
+    color:var(--plum);
+    background:none;
+    border:none;
+    cursor:pointer;
+    padding:0;
+    margin-bottom:22px;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+  }
+  .back-link:hover{color:var(--blush);}
+  .back-link:focus-visible{outline:3px solid var(--sage); outline-offset:4px;}
+
+  .recipe-header{
+    display:flex;
+    gap:24px;
+    align-items:center;
+    margin-bottom:30px;
+    flex-wrap:wrap;
+  }
+  .recipe-header .illus-lg{
+    flex:0 0 150px;
+    height:150px;
+    background:linear-gradient(160deg, #f3ece0, #eee3d1);
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+  }
+  .recipe-header .illus-lg img{width:100%;height:100%;object-fit:cover;display:block;border-radius:8px;}
+
+  .recipe-header .tag{
+    font-family:'Caveat', cursive;
+    font-weight:700;
+    color:var(--sage);
+    font-size:1.2rem;
+    display:inline-flex;
+    align-items:center;
+  }
+
+  .recipe-header h1{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-weight:600;
+    color:var(--plum-dark);
+    font-size:clamp(1.9rem, 4vw, 2.6rem);
+    margin:2px 0 0;
+    line-height:1.1;
+  }
+
+  .print-btn{
+    margin-left:auto;
+    font-family:'Caveat', cursive;
+    font-weight:700;
+    font-size:1.1rem;
+    padding:8px 18px;
+    border-radius:20px;
+    border:1.5px solid var(--plum);
+    background:#fffdf9;
+    color:var(--plum);
+    cursor:pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    align-self:flex-start;
+  }
+  .print-btn:hover{ background:var(--plum); color:#fbf6ee; }
+  .print-btn:focus-visible{ outline:3px solid var(--sage); outline-offset:3px; }
+
+  .recipe-columns{
+    display:grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap:40px;
+  }
+  @media (max-width:680px){
+    .recipe-columns{grid-template-columns:1fr;}
+    .notebook{padding:36px 20px 70px 56px;}
+    .spiral{width:40px; gap:20px; padding-top:56px;}
+    .spiral span{width:18px;height:18px;border-width:4px;}
+    .print-btn{margin-left:0;}
+  }
+
+  .panel h3{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    color:var(--plum);
+    font-size:1.15rem;
+    margin:0 0 14px;
+    padding-bottom:8px;
+    border-bottom:2px dashed var(--blush);
+  }
+
+  ul.ingredients{
+    list-style:none;
+    margin:0;
+    padding:0;
+  }
+  ul.ingredients li{
+    position:relative;
+    padding-left:28px;
+    margin-bottom:12px;
+    font-size:0.98rem;
+  }
+  ul.ingredients li::before{
+    content:"\2726";
+    position:absolute;
+    left:0;
+    top:-1px;
+    font-size:1rem;
+    color:var(--saffron);
+    text-shadow: 0 0 6px rgba(227,167,60,0.5);
+    display:inline-block;
+    transition: transform 0.2s ease;
+  }
+  ul.ingredients li:hover::before{
+    transform: scale(1.4) rotate(12deg);
+  }
+
+  ol.steps{
+    margin:0;
+    padding:0;
+    list-style:none;
+    counter-reset:step;
+  }
+  ol.steps li{
+    counter-increment:step;
+    position:relative;
+    padding-left:44px;
+    margin-bottom:22px;
+    font-size:1rem;
+  }
+  ol.steps li::before{
+    content:counter(step);
+    position:absolute;
+    left:0;
+    top:-2px;
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    background:var(--plum);
+    color:#fbf6ee;
+    font-family:'Caveat', cursive;
+    font-weight:700;
+    font-size:1.15rem;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+  ol.steps li:hover::before{
+    transform: scale(1.18);
+    background: var(--sage);
+  }
+
+  .about{
+    margin-top:56px;
+    border-top:2px dashed var(--blush);
+    padding-top:24px;
+  }
+  .about-toggle{
+    width:100%;
+    text-align:left;
+    background:none;
+    border:none;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:0;
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-weight:600;
+    font-size:1.3rem;
+    color:var(--plum-dark);
+  }
+  .about-toggle:focus-visible{outline:3px solid var(--sage); outline-offset:4px;}
+  .about-toggle .chevron{
+    font-family:'Caveat', cursive;
+    font-size:1.6rem;
+    color:var(--sage);
+    transition:transform 0.25s ease;
+  }
+  .about-toggle[aria-expanded="true"] .chevron{transform:rotate(180deg);}
+
+  .about-panel{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height 0.35s ease;
+  }
+  .about-panel.open{max-height:300px;}
+
+  .about-content{
+    padding-top:20px;
+    display:grid;
+    gap:14px;
+  }
+  .about-line{
+    font-size:1.05rem;
+  }
+  .about-line .role{
+    font-family:'Caveat', cursive;
+    font-weight:700;
+    color:var(--sage);
+    font-size:1.2rem;
+    display:block;
+  }
+  .about-line .who{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    color:var(--plum-dark);
+    font-size:1.2rem;
+  }
+  .about-line .emoji{font-size:1.2rem;}
+
+  footer{
+    margin-top:40px;
+    text-align:left;
+    font-family:'Caveat', cursive;
+    font-size:1.2rem;
+    color:var(--plum);
+    opacity:0.8;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .card{ animation:none; opacity:1; transition:none; transform:none; }
+    .card:hover{ transform:none; }
+    .logo-mark{animation:none; transition:none;}
+    .home-view, .recipe-view{ transition:none; }
+    .mini-header{ transition:none; }
+    ul.ingredients li::before, ol.steps li::before{ transition:none; }
+    html{scroll-behavior:auto;}
+  }
+
+  @media print{
+    body{ background:#fff; }
+    .spiral, .mini-header, .masthead, .filter-bar, .about, footer, .back-link, .print-btn{
+      display:none !important;
+    }
+    .home-view{ display:none !important; }
+    .notebook{ padding:0; max-width:100%; }
+    .recipe-view{ display:none; }
+    .recipe-view.active{ display:block !important; }
+    .recipe-header .illus-lg{ box-shadow:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="mini-header" id="mini-header">
+  <img src="images/logo.png" alt="Me & The Kitchen logo">
+  <span>Me &amp; The Kitchen</span>
+</div>
+
+<div class="notebook">
+  <div class="spiral" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <header class="masthead">
+    <div class="brand">
+      <img class="logo-mark" src="images/logo.png" alt="Me & The Kitchen logo">
+      <h1 class="site-title">Me &amp; The Kitchen</h1>
+    </div>
+    <p class="tagline">My favorite place to be.</p>
+  </header>
+
+  <div class="filter-bar">
+    <input type="search" id="search-input" class="search-input" placeholder="Search recipes…" aria-label="Search recipes">
+    <div class="filter-chips" role="group" aria-label="Filter recipes">
+      <button class="chip active" data-filter="all">All</button>
+      <button class="chip" data-filter="veg">🟢 Veg</button>
+      <button class="chip" data-filter="non-veg">🔴 Non-Veg</button>
+      <button class="chip" data-filter="favorites">♥ Favorites</button>
+    </div>
+  </div>
+
+  <div class="stage">
+    <main class="home-view" id="home-view">
+      <div class="cards" id="card-grid"></div>
+      <p class="empty-state" id="empty-state">No recipes match — try clearing the filters. ✦</p>
+    </main>
+
+    <div id="recipe-container"></div>
+  </div>
+
+  <section class="about">
+    <button class="about-toggle" id="about-toggle" aria-expanded="false" aria-controls="about-panel">
+      About this kitchen
+      <span class="chevron">&#8964;</span>
+    </button>
+    <div class="about-panel" id="about-panel">
+      <div class="about-content">
+        <p class="about-line">
+          <span class="role">Recipe maker</span>
+          <span class="who">P Rohitha</span> <span class="emoji">&#128081;&#128104;&zwj;&#127859;</span>
+        </p>
+        <p class="about-line">
+          <span class="role">Developed by</span>
+          <span class="who">Ch Sampath</span> <span class="emoji">🤴&#128187;</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer>made with ♥ in the kitchen</footer>
+</div>
+
+<script>
+  const recipes = [
+    {
+      id: "thotakura-pachadi",
+      tag: "Andhra-style chutney",
+      diet: "veg",
+      title: "Thotakura Pachadi",
+      desc: "Amaranth leaves ground into a garlicky, tangy chutney.",
+      image: "images/thotakura-pachadi.jpg",
+      ingredients: [
+        "Amaranthus leaves (thotakura) &ndash; 1 bunch (about &#8377;20 worth)",
+        "Cumin seeds (jeera) &ndash; &frac12; tsp",
+        "Fennel seeds (sounf) &ndash; &frac12; tsp",
+        "Garlic cloves &ndash; 3",
+        "Tamarind &ndash; a small piece",
+        "Salt &amp; chilli powder &ndash; 1 tsp",
+        "Onion &ndash; 1",
+        "Tomatoes &ndash; 2",
+        "Oil &ndash; 10 ml"
+      ],
+      steps: [
+        "Heat 10 ml oil in a pan.",
+        "Add all the ingredients &mdash; garlic, onion, tomatoes, cumin, fennel, tamarind, chilli powder, salt and the amaranthus leaves &mdash; and fry until everything softens.",
+        "Let it cool slightly, then grind it all into a coarse chutney."
+      ]
+    },
+    {
+      id: "crispy-soy-garlic-chicken",
+      tag: "Air-fryer favorite",
+      diet: "non-veg",
+      title: "Crispy Soy Garlic Chicken",
+      desc: "Air-fried chicken chunks tossed in a sticky soy-garlic sauce.",
+      image: "images/crispy-soy-garlic-chicken.jpg",
+      ingredients: [
+        "Chicken chunks",
+        "Cornstarch &ndash; for coating",
+        "Salt &amp; pepper",
+        "Garlic powder",
+        "Soy sauce",
+        "Ginger paste",
+        "Garlic paste",
+        "Brown sugar"
+      ],
+      steps: [
+        "Combine chicken chunks with cornstarch, salt, garlic powder and pepper powder; mix well until evenly coated.",
+        "Air-fry at 375&deg;F for 20 minutes, until golden and crispy.",
+        "In a pan, add soy sauce, ginger paste, garlic paste and brown sugar; combine and simmer until the sauce thickens.",
+        "Toss the crispy chicken in the sauce, mix well, and enjoy!"
+      ]
+    },
+    {
+      id: "chicken-fry-piece-mandi",
+      tag: "Mandi-style rice",
+      diet: "non-veg",
+      title: "Chicken Fry Piece Mandi",
+      desc: "Fragrant dum-cooked rice topped with crispy fried chicken and dry fruits.",
+      image: "images/chicken-fry-piece-mandi.jpg",
+      ingredients: [
+        "Rice &ndash; 1 cup",
+        "Water &ndash; 1.5 cups",
+        "Lemon juice, salt, karam (chilli powder) &ndash; to taste",
+        "Ginger garlic paste, mandi masala &ndash; to taste",
+        "Chicken pieces &ndash; as needed",
+        "Chopped onion, whole garam masala &ndash; for the rice base",
+        "Pudina (mint), kothmeer (coriander) &ndash; herbs",
+        "Maggi chicken stock cube + a little chicken stock &ndash; flavor booster",
+        "Dry fruits &ndash; for garnish",
+        "Oil or ghee &ndash; for frying"
+      ],
+      steps: [
+        "Marinate the chicken pieces with lemon juice, salt, karam, ginger garlic paste, and mandi masala.",
+        "Steam the marinated chicken until cooked through, then fry the pieces until crispy.",
+        "In a separate pot, add chopped onion, ginger garlic paste, lemon juice, salt, whole garam masala, pudina, kothmeer, the Maggi chicken stock cube, a little chicken stock, and mandi masala.",
+        "Pour in the water and bring it to a boil, then add the soaked rice and let it cook.",
+        "Assemble by placing the fried chicken on top of the cooked rice, garnish with dry fruits, and put it on dum for 20 minutes.",
+        "Serve &amp; enjoy! &#10084;&#65039;"
+      ]
+    }
+  ];
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const stageDuration = reduceMotion ? 0 : 300;
+
+  const cardGrid = document.getElementById('card-grid');
+  const recipeContainer = document.getElementById('recipe-container');
+  const homeView = document.getElementById('home-view');
+  const emptyState = document.getElementById('empty-state');
+
+  const heartOutlineSvg = `<svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10-9.3C.4 8.1 2 4.5 5.4 4a5 5 0 0 1 6.6 2.1A5 5 0 0 1 18.6 4C22 4.5 23.6 8.1 22 11.7 19.5 16.4 12 21 12 21z"/></svg>`;
+
+  // ---------- favorites (localStorage) ----------
+  const FAV_KEY = 'meAndKitchen:favorites';
+  function loadFavorites(){
+    try{ return JSON.parse(localStorage.getItem(FAV_KEY)) || []; }
+    catch(e){ return []; }
+  }
+  function saveFavorites(arr){
+    try{ localStorage.setItem(FAV_KEY, JSON.stringify(arr)); }catch(e){}
+  }
+  let favorites = loadFavorites();
+  function isFavorite(id){ return favorites.includes(id); }
+  function toggleFavorite(id, btn){
+    if(isFavorite(id)){
+      favorites = favorites.filter(f => f !== id);
+      btn.classList.remove('is-fav');
+    } else {
+      favorites.push(id);
+      btn.classList.add('is-fav');
+    }
+    saveFavorites(favorites);
+    if(document.querySelector('.chip.active').dataset.filter === 'favorites'){
+      applyFilters();
+    }
+  }
+
+  function dietBadge(diet){
+    return `<span class="diet-badge ${diet}" aria-hidden="true"></span>`;
+  }
+
+  recipes.forEach((r, index) => {
+    const card = document.createElement('button');
+    card.className = 'card';
+    card.id = `card-${r.id}`;
+    card.style.animationDelay = `${index * 0.12}s`;
+    card.setAttribute('aria-label', `Open recipe: ${r.title}`);
+    card.innerHTML = `
+      <div class="tape"></div>
+      <button class="fav-btn ${isFavorite(r.id) ? 'is-fav' : ''}" aria-label="Save ${r.title} to favorites" type="button">${heartOutlineSvg}</button>
+      <div class="illus"><img src="${r.image}" alt="${r.title}" loading="lazy"></div>
+      <div class="card-body">
+        <span class="tag">${dietBadge(r.diet)}${r.tag}</span>
+        <h2>${r.title}</h2>
+        <p class="desc">${r.desc}</p>
+      </div>
+    `;
+    card.addEventListener('click', () => showRecipe(r.id));
+    const favBtn = card.querySelector('.fav-btn');
+    favBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleFavorite(r.id, favBtn);
+    });
+    cardGrid.appendChild(card);
+
+    const view = document.createElement('section');
+    view.className = 'recipe-view';
+    view.id = `view-${r.id}`;
+    view.innerHTML = `
+      <button class="back-link">&larr; back to the kitchen</button>
+      <div class="recipe-header">
+        <div class="illus-lg"><img src="${r.image}" alt="${r.title}" loading="lazy"></div>
+        <div>
+          <span class="tag">${dietBadge(r.diet)}${r.tag}</span>
+          <h1>${r.title}</h1>
+        </div>
+        <button class="print-btn" type="button">&#128424; Print recipe</button>
+      </div>
+      <div class="recipe-columns">
+        <div class="panel">
+          <h3>Ingredients</h3>
+          <ul class="ingredients">
+            ${r.ingredients.map(i => `<li>${i}</li>`).join('')}
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>Method</h3>
+          <ol class="steps">
+            ${r.steps.map(s => `<li>${s}</li>`).join('')}
+          </ol>
+        </div>
+      </div>
+    `;
+    view.querySelector('.back-link').addEventListener('click', showHome);
+    view.querySelector('.print-btn').addEventListener('click', () => window.print());
+    recipeContainer.appendChild(view);
+  });
+
+  // ---------- page-turn transitions ----------
+  function showRecipe(id){
+    const target = document.getElementById(`view-${id}`);
+    if(!target) return;
+    homeView.classList.add('page-exit');
+    setTimeout(() => {
+      homeView.classList.add('hidden');
+      homeView.classList.remove('page-exit');
+      document.querySelectorAll('.recipe-view').forEach(v => v.classList.remove('active'));
+      target.classList.add('active', 'page-enter-from');
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => { target.classList.remove('page-enter-from'); });
+      });
+      window.scrollTo({top:0, behavior: reduceMotion ? 'auto' : 'smooth'});
+      history.replaceState(null, '', `#${id}`);
+    }, stageDuration);
+  }
+
+  function showHome(){
+    const active = document.querySelector('.recipe-view.active');
+    if(active){ active.classList.add('page-exit'); }
+    setTimeout(() => {
+      document.querySelectorAll('.recipe-view').forEach(v => { v.classList.remove('active'); v.classList.remove('page-exit'); });
+      homeView.classList.remove('hidden');
+      homeView.classList.add('page-enter-from');
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => { homeView.classList.remove('page-enter-from'); });
+      });
+      window.scrollTo({top:0, behavior: reduceMotion ? 'auto' : 'smooth'});
+      history.replaceState(null, '', location.pathname);
+    }, stageDuration);
+  }
+
+  // deep-link support (instant, no transition on first paint)
+  const initial = location.hash.replace('#','');
+  if (recipes.some(r => r.id === initial)) {
+    homeView.classList.add('hidden');
+    document.getElementById(`view-${initial}`).classList.add('active');
+  }
+
+  // ---------- about section ----------
+  const aboutToggle = document.getElementById('about-toggle');
+  const aboutPanel = document.getElementById('about-panel');
+  aboutToggle.addEventListener('click', () => {
+    const expanded = aboutToggle.getAttribute('aria-expanded') === 'true';
+    aboutToggle.setAttribute('aria-expanded', String(!expanded));
+    aboutPanel.classList.toggle('open');
+  });
+
+  // ---------- search / filter ----------
+  const searchInput = document.getElementById('search-input');
+  const chips = document.querySelectorAll('.chip');
+
+  function applyFilters(){
+    const q = searchInput.value.trim().toLowerCase();
+    const activeChip = document.querySelector('.chip.active').dataset.filter;
+    let anyVisible = false;
+    recipes.forEach(r => {
+      const card = document.getElementById(`card-${r.id}`);
+      const matchesSearch = !q || r.title.toLowerCase().includes(q) || r.tag.toLowerCase().includes(q);
+      let matchesChip = true;
+      if(activeChip === 'veg') matchesChip = r.diet === 'veg';
+      else if(activeChip === 'non-veg') matchesChip = r.diet === 'non-veg';
+      else if(activeChip === 'favorites') matchesChip = isFavorite(r.id);
+      const visible = matchesSearch && matchesChip;
+      card.style.display = visible ? '' : 'none';
+      if(visible) anyVisible = true;
+    });
+    emptyState.style.display = anyVisible ? 'none' : 'block';
+  }
+
+  searchInput.addEventListener('input', applyFilters);
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      applyFilters();
+    });
+  });
+
+  // ---------- sticky mini header ----------
+  const miniHeader = document.getElementById('mini-header');
+  window.addEventListener('scroll', () => {
+    if(window.scrollY > 260){ miniHeader.classList.add('visible'); }
+    else { miniHeader.classList.remove('visible'); }
+  });
+  miniHeader.addEventListener('click', () => {
+    if(homeView.classList.contains('hidden')){
+      showHome();
+    } else {
+      window.scrollTo({top:0, behavior: reduceMotion ? 'auto' : 'smooth'});
+    }
+  });
+</script>
+
+</body>
+</html>
